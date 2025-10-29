@@ -5,6 +5,7 @@ import java.util.Scanner;
 public class Restaurant {
 
 	static Scanner scan = new Scanner(System.in);
+	static String[] menuType = {"Entry", "Main course", "Accompaniment", "Drink", "Desert"} ; // String array of the menu name.
 	static String[][] menu = { // 2 Dimensionnal array of the menu.
 			{"None", "Salad", "Soup", "Quiche"},
 			{"None", "Chicken", "Beef", "Fish", "Vegan"},
@@ -15,10 +16,17 @@ public class Restaurant {
 	
 	public static void main(String[] args) {
 		System.out.println("Hello, how many orders do you want ?");
+		if (!scan.hasNextInt())
+			System.out.println("Please select a valid amount.");
+		
 		int amount = scan.nextInt();
 		
-		for (int i = 0; i < amount; i++) // Do as many orders as requested beforehand.
+		for (int i = 0; i < amount; i++) { // Do as many orders as requested beforehand.
+			System.out.println("Starting order " + (i+1));
 			startOrder();
+		}
+		
+		System.out.println("Enjoy your meal !");
 		
 		scan.close();
 	}
@@ -30,12 +38,13 @@ public class Restaurant {
 			order[i] = selectOrder(i);
 
 		System.out.print("[");
-		for(String ord : order) {
-			System.out.print(ord);
-			System.out.print(" ");
+		for(int i = 0; i < order.length; i++) {
+			System.out.print(order[i]);
+			if (i < order.length-1)
+				System.out.print(", ");
 		}
 		System.out.print("]");
-		System.out.println();
+		System.out.println("\n");
 	}
 	
 	/**
@@ -49,11 +58,14 @@ public class Restaurant {
 		}
 		System.out.println();
 		
-		System.out.println("Select a number :");
+		System.out.println("Select " + menuType[index].toLowerCase() + " :");
+		if (!scan.hasNextInt())
+			return menu[index][0]; // Return None in the menu if the input is not valid.
+		
 		int input = scan.nextInt();
 		
 		if (input < 0 && input >= menu[index].length)
-			return menu[0][0]; // Return None in the menu if the input is not valid.
+			return menu[index][0]; // Return None in the menu if the input is not valid.
 		
 		return menu[index][input];
 	}
